@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { LoginSideSVG } from "@/components/svg/login-side"
 import Link from "next/link";
 
 export type LoginFormProps = React.ComponentProps<"div"> & {
@@ -71,59 +72,7 @@ export function LoginForm({
             </div>
           </form>
           <div className="bg-muted relative hidden md:block overflow-hidden">
-            <svg
-              className="absolute inset-0 h-full w-full"
-              viewBox="0 0 400 400"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path
-                    d="M 40 0 L 0 0 0 40"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="0.5"
-                    className="text-muted-foreground/20"
-                  />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" />
-              <circle
-                cx="100"
-                cy="100"
-                r="60"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                className="text-primary/30"
-              />
-              <circle
-                cx="300"
-                cy="300"
-                r="80"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                className="text-primary/20"
-              />
-              <circle
-                cx="250"
-                cy="150"
-                r="40"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                className="text-primary/25"
-              />
-              <path
-                d="M50 350 Q200 250 350 350"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="text-primary/40"
-              />
-            </svg>
+            <LoginSideSVG />
           </div>
         </CardContent>
       </Card>

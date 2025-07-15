@@ -29,6 +29,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser"
+import Link from "next/link"
 
 export function NavUser({
   user,
@@ -39,7 +41,14 @@ export function NavUser({
     avatar: string
   }
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
+  const supabase = getSupabaseBrowserClient();
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    const res = await supabase.auth.signOut();
+    console.log(res);
+  };
 
   return (
     <SidebarMenu>
@@ -102,9 +111,11 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
+            <DropdownMenuItem asChild>
+              <Link href="/auth/logout" prefetch={false} onClick={handleLogout}>
+                <LogOut />
+                Log out
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -15,7 +15,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Tickets } from "./tickets"
@@ -51,7 +50,6 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [activeItem, setActiveItem] = React.useState(data.navMain[0])
-  const { setOpen } = useSidebar()
 
   return (
     <Sidebar

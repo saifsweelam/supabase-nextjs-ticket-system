@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -5,6 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { LoginSideSVG } from "@/components/svg/login-side"
 import Link from "next/link";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser"
+import { useRef } from "react"
+import { toast } from "react-toastify";
 
 export type LoginFormProps = React.ComponentProps<"div"> & {
     isPasswordLogin: boolean;
@@ -14,11 +18,46 @@ export function LoginForm({
   isPasswordLogin,
   ...props
 }: LoginFormProps) {
+  const supabase = getSupabaseBrowserClient();
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (isPasswordLogin) {
+      e.preventDefault();
+      await toast.promise(
+        handlePasswordLogin(),
+        {
+          pending: "Logging in...",
+          success: "Login successful!",
+          error: {
+            render({ data }) {
+              if (data instanceof Error) {
+                return data.message || "Login failed. Please try again.";
+              }
+            },
+          },
+        }
+      )
+    }
+  }
+
+  const handlePasswordLogin = async () => {
+    const result = await supabase.auth.signInWithPassword({
+      email: emailRef.current!.value,
+      password: passwordRef.current!.value,
+    });
+    if (result.data.user) {
+      return result.data.user;
+    }
+    throw new Error(result.error?.message || "Login failed");
+  }
+
   return (
-    <div className={cn("flex flex-col gap-6 justify-center min-h-screen", className)} {...props}>
+    <div className={cn("mx-auto max-w-screen-lg px-4 sm:px-6 lg:px-8 flex flex-col gap-6 justify-center min-h-screen", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" method="POST" action="/auth/login" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -33,9 +72,11 @@ export function LoginForm({
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
+                  ref={emailRef}
                 />
               </div>
               {isPasswordLogin && (
@@ -49,7 +90,7 @@ export function LoginForm({
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input id="password" type="password" name="password" required ref={passwordRef} />
                 </div>
               )}
               <Button type="submit" className="w-full">
@@ -69,6 +110,7 @@ export function LoginForm({
                   Sign up
                 </Link>
               </div>
+              <input type="checkbox" name="isPasswordLogin" className="hidden" checked={isPasswordLogin} readOnly />
             </div>
           </form>
           <div className="bg-muted relative hidden md:block overflow-hidden">

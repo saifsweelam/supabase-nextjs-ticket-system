@@ -12,7 +12,9 @@ export function AuthSubscription() {
             if (event === "SIGNED_OUT") {
                 router.push("/auth/login");
             } else if (event === "SIGNED_IN") {
-                router.push("/dashboard/tickets");
+                if (!window.location.pathname.startsWith("/dashboard")) {
+                    router.push("/dashboard/tickets");
+                }
             }
         });
 

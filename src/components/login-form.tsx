@@ -12,10 +12,12 @@ import { toast } from "react-toastify";
 
 export type LoginFormProps = React.ComponentProps<"div"> & {
     isPasswordLogin: boolean;
+    type: 'recovery' | 'magiclink';
 }
 export function LoginForm({
   className,
   isPasswordLogin,
+  type,
   ...props
 }: LoginFormProps) {
   const supabase = getSupabaseBrowserClient();
@@ -83,12 +85,12 @@ export function LoginForm({
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
-                    <a
-                      href="#"
+                    <Link
+                      href={{ pathname: "", query: { isMagicLink: isPasswordLogin, type: "recovery" } }}
                       className="ml-auto text-sm underline-offset-2 hover:underline"
                     >
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                   <Input id="password" type="password" name="password" required ref={passwordRef} />
                 </div>
@@ -111,6 +113,7 @@ export function LoginForm({
                 </Link>
               </div>
               <input type="checkbox" name="isPasswordLogin" className="hidden" checked={isPasswordLogin} readOnly />
+              <input type="hidden" name="type" value={type} readOnly />
             </div>
           </form>
           <div className="bg-muted relative hidden md:block overflow-hidden">

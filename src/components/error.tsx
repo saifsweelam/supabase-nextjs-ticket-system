@@ -154,6 +154,19 @@ const errorData = {
       "Upgrade your account if needed"
     ],
     technicalDetails: "User role does not have sufficient privileges for this operation."
+  },
+  "bad-request": {
+    title: "Bad Request",
+    description: "The request was invalid or cannot be otherwise served.",
+    icon: AlertTriangle,
+    severity: "error" as const,
+    code: "400",
+    suggestions: [
+      "Check the request parameters",
+      "Ensure the request format is correct",
+      "Consult the API documentation for required fields"
+    ],
+    technicalDetails: "The server could not understand the request due to invalid syntax."
   }
 };
 

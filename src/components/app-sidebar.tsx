@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ArchiveX, Command, File, Plus, Projector, Send, Ticket, Trash2, User2, UserCog, UserCog2 } from "lucide-react"
+import { Command, Plus, Settings2, Ticket, UserCog } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
 import {
@@ -19,7 +19,6 @@ import {
 import Link from "next/link"
 import { Tickets } from "./tickets"
 
-// This is sample data
 const data = {
   user: {
     name: "shadcn",
@@ -45,6 +44,11 @@ const data = {
       icon: UserCog,
       isActive: false,
     },
+    {
+      title: "Settings",
+      url: "/dashboard/settings",
+      icon: Settings2,
+    }
   ]
 }
 

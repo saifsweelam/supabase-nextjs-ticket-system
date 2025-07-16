@@ -14,12 +14,17 @@ export const loginWithPassword = async (email: string, password: string) => {
     return data;
 };
 
-export const loginWithMagicLink = async (email: string, url: string) => {
+export const loginWithMagicLink = async (email: string, url: string, type: 'recovery' | 'magiclink') => {
     const supabase = getSupabaseAdminClient();
-    const { data, error } = await supabase.auth.admin.generateLink({ email, type: "magiclink" });
+    const { data, error } = await supabase.auth.admin.generateLink({ email, type });
     if (error) throw error;
-    const magicLink = new URL(`/auth/verify?hashed_token=${data.properties.hashed_token}`, url).toString();
-    return await sendMagicLinkEmail(email, magicLink);
+    const magicLink = new URL(`/auth/verify?hashed_token=${data.properties.hashed_token}`, url);
+    if (type === 'recovery') {
+        magicLink.searchParams.set('type', 'recovery');
+    } else {
+        magicLink.searchParams.set('type', 'magiclink');
+    }
+    return await sendMagicLinkEmail(email, magicLink.toString());
 };
 
 export const verifyMagicLink = async (hashedToken: string) => {

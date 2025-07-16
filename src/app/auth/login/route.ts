@@ -17,7 +17,11 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-        await loginWithMagicLink(email, request.url);
+        const type = body.get("type") as 'recovery' | 'magiclink';
+        if (type !== 'recovery' && type !== 'magiclink') {
+            return NextResponse.redirect(new URL("/error?type=bad-request", request.url), 302);
+        }
+        await loginWithMagicLink(email, request.url, type);
         return NextResponse.redirect(new URL("/auth/login/magicLink", request.url), 302);
     } catch {
         return NextResponse.redirect(new URL("/error?type=magic-link-sending-failed", request.url), 302);

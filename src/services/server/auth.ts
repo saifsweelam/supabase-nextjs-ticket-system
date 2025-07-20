@@ -1,6 +1,7 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { sendMagicLinkEmail } from "./emails";
+import { getFullUrl } from "../common/url";
 
 export const loginWithPassword = async (email: string, password: string) => {
     const supabase = await getSupabaseServerClient();
@@ -14,11 +15,11 @@ export const loginWithPassword = async (email: string, password: string) => {
     return data;
 };
 
-export const loginWithMagicLink = async (email: string, url: string, type: 'recovery' | 'magiclink') => {
+export const loginWithMagicLink = async (email: string, url: string, type: 'recovery' | 'magiclink', tenant: string) => {
     const supabase = getSupabaseAdminClient();
     const { data, error } = await supabase.auth.admin.generateLink({ email, type });
     if (error) throw error;
-    const magicLink = new URL(`/auth/verify?hashed_token=${data.properties.hashed_token}`, url);
+    const magicLink = getFullUrl(`/auth/verify?hashed_token=${data.properties.hashed_token}`, tenant, url);
     if (type === 'recovery') {
         magicLink.searchParams.set('type', 'recovery');
     } else {

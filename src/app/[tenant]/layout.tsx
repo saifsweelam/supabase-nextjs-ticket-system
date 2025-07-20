@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ToastContainer } from 'react-toastify';
-import "./globals.css";
+import "../globals.css";
 import { AuthSubscription } from "@/components/auth-subscription";
+import { URLProvider } from "@/services/client/urlProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,22 +17,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ticket System",
-  description: "An application ",
+  description: "An application",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+export type RootLayoutProps = Readonly<{
   children: React.ReactNode;
-}>) {
+  params: Promise<{ tenant: string; }>;
+}>;
+
+export default async function RootLayout({
+  children,
+  params,
+}: RootLayoutProps) {
+  const { tenant } = await params;
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>{children}</main>
-        <ToastContainer />
-        <AuthSubscription />
+        <URLProvider tenant={tenant}>
+          <main>
+            {children}
+          </main>
+          <ToastContainer />
+          <AuthSubscription />
+        </URLProvider>
       </body>
     </html>
   );

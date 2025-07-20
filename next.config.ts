@@ -7,13 +7,13 @@ const nextConfig: NextConfig = {
   },
   redirects: async () => [
     {
-      source: "/logout",
-      destination: "/auth/logout",
+      source: "/:tenant/logout",
+      destination: "/:tenant/auth/logout",
       permanent: true
     },
     {
-      source: "/dashboard",
-      destination: "/dashboard/tickets",
+      source: "/:tenant/dashboard",
+      destination: "/:tenant/dashboard/tickets",
       permanent: true
     }
   ]

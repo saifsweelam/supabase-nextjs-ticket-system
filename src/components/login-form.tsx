@@ -9,6 +9,7 @@ import Link from "next/link";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser"
 import { useRef } from "react"
 import { toast } from "react-toastify";
+import { useURL } from "@/services/client/urlProvider";
 
 export type LoginFormProps = React.ComponentProps<"div"> & {
     isPasswordLogin: boolean;
@@ -23,6 +24,7 @@ export function LoginForm({
   const supabase = getSupabaseBrowserClient();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const { getPath } = useURL();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (isPasswordLogin) {
@@ -59,7 +61,7 @@ export function LoginForm({
     <div className={cn("mx-auto max-w-screen-lg px-4 sm:px-6 lg:px-8 flex flex-col gap-6 justify-center min-h-screen", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" method="POST" action="/auth/login" onSubmit={handleSubmit}>
+          <form className="p-6 md:p-8" method="POST" action={getPath("/auth/login")} onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -86,7 +88,7 @@ export function LoginForm({
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                     <Link
-                      href={{ pathname: "", query: { isMagicLink: isPasswordLogin, type: "recovery" } }}
+                      href={{ pathname: getPath('/'), query: { isMagicLink: isPasswordLogin, type: "recovery" } }}
                       className="ml-auto text-sm underline-offset-2 hover:underline"
                     >
                       Forgot your password?
@@ -100,7 +102,7 @@ export function LoginForm({
               </Button>
               <div className="text-center text-sm">
                 <Link 
-                  href={{ pathname: "", query: { isMagicLink: isPasswordLogin } }}
+                  href={{ pathname: getPath('/'), query: { isMagicLink: isPasswordLogin } }}
                   className="underline underline-offset-4"
                 >
                   {isPasswordLogin ? "Use magic link instead" : "Use password instead"}
@@ -108,7 +110,7 @@ export function LoginForm({
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <Link href={{ pathname: "signup" }} className="underline underline-offset-4">
+                <Link href={{ pathname: getPath('/signup') }} className="underline underline-offset-4">
                   Sign up
                 </Link>
               </div>

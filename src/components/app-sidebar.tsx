@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Tickets } from "./tickets"
+import { useURL } from "@/services/client/urlProvider"
 
 const data = {
   user: {
@@ -53,7 +54,8 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
+  const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
+  const { getPath } = useURL();
 
   return (
     <Sidebar
@@ -69,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                <Link href="/">
+                <Link href={getPath("/")}>
                   <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                     <Command className="size-4" />
                   </div>
@@ -98,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       onClick={() => setActiveItem(item)}
                       asChild
                     >
-                      <Link href={item.url}>
+                      <Link href={getPath(item.url)}>
                         <item.icon />
                         <span>{item.title}</span>
                       </Link>

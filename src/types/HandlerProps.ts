@@ -1,0 +1,1 @@
+export type HandlerProps = { params: { tenant: string } };

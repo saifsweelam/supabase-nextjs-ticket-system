@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/sidebar"
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser"
 import Link from "next/link"
+import { useURL } from "@/services/client/urlProvider"
 
 export function NavUser({
   user,
@@ -43,6 +44,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const supabase = getSupabaseBrowserClient();
+  const { getPath } = useURL();
 
   const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -112,7 +114,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/auth/logout" prefetch={false} onClick={handleLogout}>
+              <Link href={getPath("/auth/logout")} prefetch={false} onClick={handleLogout}>
                 <LogOut />
                 Log out
               </Link>

@@ -1,3 +1,5 @@
+"use client";
+import { useURL } from "@/services/client/urlProvider";
 import Link from "next/link";
 
 const tickets = [
@@ -22,11 +24,12 @@ const tickets = [
 ];
 
 export function Tickets() {
+    const { getPath } = useURL();
     return (
         <>
             {tickets.map((ticket) => (
                 <Link
-                    href={`/dashboard/tickets/details/${ticket.id}`}
+                    href={getPath(`/dashboard/tickets/details/${ticket.id}`)}
                     key={ticket.id}
                     className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0"
                 >

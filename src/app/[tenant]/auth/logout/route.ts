@@ -3,7 +3,8 @@ import { logout } from "@/services/server/auth";
 import { HandlerProps } from "@/types/HandlerProps";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: HandlerProps) {
+export async function GET(request: NextRequest, probs: HandlerProps) {
+    const params = await probs.params;
     try {
         await logout();
         return NextResponse.redirect(getFullUrl("/auth/login", params.tenant, request.url));

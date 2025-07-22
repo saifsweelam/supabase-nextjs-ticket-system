@@ -10,6 +10,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser"
 import { useRef } from "react"
 import { toast } from "react-toastify";
 import { useURL } from "@/services/client/urlProvider";
+import { useAuth } from "@/services/client/authProvider";
 
 export type LoginFormProps = React.ComponentProps<"div"> & {
     isPasswordLogin: boolean;
@@ -25,12 +26,13 @@ export function LoginForm({
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const { getPath } = useURL();
+  const { loginWithPassword } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (isPasswordLogin) {
       e.preventDefault();
       await toast.promise(
-        handlePasswordLogin(),
+        loginWithPassword(emailRef.current!.value, passwordRef.current!.value),
         {
           pending: "Logging in...",
           success: "Login successful!",
@@ -44,17 +46,6 @@ export function LoginForm({
         }
       )
     }
-  }
-
-  const handlePasswordLogin = async () => {
-    const result = await supabase.auth.signInWithPassword({
-      email: emailRef.current!.value,
-      password: passwordRef.current!.value,
-    });
-    if (result.data.user) {
-      return result.data.user;
-    }
-    throw new Error(result.error?.message || "Login failed");
   }
 
   return (

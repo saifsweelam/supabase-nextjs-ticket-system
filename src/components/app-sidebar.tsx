@@ -19,13 +19,9 @@ import {
 import Link from "next/link"
 import { Tickets } from "./tickets"
 import { useURL } from "@/services/client/urlProvider"
+import { useTenant } from "@/services/client/tenantProvider"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Tickets",
@@ -56,6 +52,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
   const { getPath } = useURL();
+  const tenant = useTenant();
 
   return (
     <Sidebar
@@ -112,7 +109,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <NavUser user={data.user} />
+          <NavUser />
         </SidebarFooter>
       </Sidebar>
 
@@ -122,7 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarHeader className="gap-3.5 border-b p-4">
           <div className="flex w-full items-center justify-between">
             <div className="text-foreground text-base font-medium">
-              {activeItem?.title}
+              {tenant.name}
             </div>
           </div>
           <SidebarInput placeholder="Type to search..." />

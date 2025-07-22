@@ -6,11 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AlertTriangle, ArrowLeft, Bug, Clock, Home, RefreshCw, Shield, Wifi } from "lucide-react";
-import { useURL } from "@/services/client/urlProvider";
 
 export type ErrorProps = {
   errorId: string;
   date: string;
+  getPath: (path: string) => string;
 }
 
 const errorData = {
@@ -182,9 +182,8 @@ const getSeverityColor = (severity: "error" | "warning") => {
   }
 };
 
-export function Error({ errorId, date }: ErrorProps) {
+export function Error({ errorId, date, getPath }: ErrorProps) {
   const error = errorData[errorId as keyof typeof errorData] || errorData["page-not-found"];
-  const { getPath } = useURL();
 
   return (
     <Card className="border-2">
@@ -259,7 +258,7 @@ export function Error({ errorId, date }: ErrorProps) {
               {error.technicalDetails}
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              Error ID: {errorId} • Timestamp: {date}
+              Error ID: {errorId}{date && ` • Timestamp: ${date}`}
             </p>
           </div>
         </details>

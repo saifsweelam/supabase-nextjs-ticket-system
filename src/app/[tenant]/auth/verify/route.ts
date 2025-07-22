@@ -3,7 +3,8 @@ import { verifyMagicLink } from "@/services/server/auth";
 import { HandlerProps } from "@/types/HandlerProps";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: HandlerProps) {
+export async function GET(request: NextRequest, probs: HandlerProps) {
+    const params = await probs.params;
     const { searchParams } = new URL(request.url);
     const hashedToken = searchParams.get('hashed_token');
     const type = searchParams.get('type') as 'recovery' | 'magiclink';

@@ -3,7 +3,8 @@ import { loginWithMagicLink, loginWithPassword } from "@/services/server/auth";
 import { HandlerProps } from "@/types/HandlerProps";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest, { params }: HandlerProps) {
+export async function POST(request: NextRequest, probs: HandlerProps) {
+    const params = await probs.params;
     const body = await request.formData();
     const email = body.get("email") as string;
     const isPasswordLogin = body.get("isPasswordLogin") === "on";
@@ -12,7 +13,7 @@ export async function POST(request: NextRequest, { params }: HandlerProps) {
     if (isPasswordLogin) {
         try {
             const password = body.get("password") as string;
-            await loginWithPassword(email, password);
+            await loginWithPassword(email, password, tenant);
             return NextResponse.redirect(getFullUrl('/dashboard/tickets', params.tenant, request.url), 302);
         } catch {
             return NextResponse.redirect(getFullUrl('/error?type=login-failed', params.tenant, request.url), 302);
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest, { params }: HandlerProps) {
     }
 }
 
-export async function GET(request: NextRequest, { params }: HandlerProps) {
+export async function GET(request: NextRequest, probs: HandlerProps) {
+    const params = await probs.params;
     return NextResponse.redirect(getFullUrl("/", params.tenant, request.url));
 }

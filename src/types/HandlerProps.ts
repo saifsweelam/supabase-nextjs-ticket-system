@@ -1,1 +1,1 @@
-export type HandlerProps = { params: { tenant: string } };
+export type HandlerProps = { params: Promise<{ tenant: string }> };
